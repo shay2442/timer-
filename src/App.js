@@ -2,36 +2,43 @@ import {useState, useEffect} from 'react'
 import './App.css';
 
 function App() {
-const [time, setTime] = useState(0)
+const [count, setCount] = useState(0)
 const [timerOn, setTimerOn] = useState(false)
-const [likes, setLikes] = useState(0)
 
 useEffect(() => {
-  let interval = null
+  let interval = null 
   if(timerOn) {
-    interval = setInterval(() => {
-      setTime(prevTime => prevTime + 10)
-    },10)
-  }else {
+    interval = setInterval(() => setCount(prevTime => prevTime + 10))
+  } else {
     clearInterval(interval)
   }
   return () => clearInterval(interval)
-}, [timerOn])
+},[timerOn])
 
+let x = 100
 
- 
+function logx() {
+  console.log(x)
+}
+ logx()
+
+ function makeAdder(x) {
+   return function(y) {
+     return x + y
+
+   }
+ }
+
+ const add5 = makeAdder(5)
+
+ console.log(add5(10))
   
   return (
     <div className="App">
-    <div>{time}</div>
-    <button onClick={() => setTimerOn(true)}>start</button>
-    <button onClick={() => setTimerOn(false)}>stop</button>
-    <button onClick={() => setTime(0)}>reset</button>
-    <div>{likes}</div>
-    <button onClick={() => setLikes(likes + 1)}>likes</button>
-
- 
-
+   <div>{count}</div>
+   <button onClick={() => setTimerOn(true)}>start</button>
+   <button onClick={() => setTimerOn(false)}>stop</button>
+   <button onClick={() => setCount(0)}>reset</button>
    
 </div>
   );
