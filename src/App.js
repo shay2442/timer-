@@ -2,43 +2,64 @@ import {useState, useEffect} from 'react'
 import './App.css';
 
 function App() {
-const [count, setCount] = useState(0)
+const [time, setTime] = useState(0)
 const [timerOn, setTimerOn] = useState(false)
+const [pokemons, setPokemons] = useState([])
+const [currentPokemon, setCurrentPokemon] = useState(1)
+const [pokemon, setPokemon] = useState('')
+const [count, setCount] = useState(0)
 
 useEffect(() => {
-  let interval = null 
+  let interval = null;
   if(timerOn) {
-    interval = setInterval(() => setCount(prevTime => prevTime + 10))
-  } else {
-    clearInterval(interval)
+    interval = setInterval(() => {
+      setTime(prevTime => prevTime + 10)
+    },100)
+  } else{
+      clearInterval(interval)
   }
   return () => clearInterval(interval)
-},[timerOn])
+ },[timerOn])
 
-let x = 100
+//  useEffect((name) => {
+//   fetch("https://pokeapi.co/api/v2/pokemon")
+//   .then((r) => r.json())
+//   .then((pokemons) => setPokemons(pokemons.results))
 
-function logx() {
-  console.log(x)
+//  },[])
+
+useEffect((name) => {
+  fetch(`https://pokeapi.co/api/v2/pokemon/${currentPokemon}`, {})
+  .then((r) => r.json())
+  .then((pokemon) => setPokemon(pokemon))
+  console.log(pokemon)
+}, [currentPokemon])
+
+function handleClick() {
+  setCurrentPokemon(currentPokemon + 1)
 }
- logx()
 
- function makeAdder(x) {
-   return function(y) {
-     return x + y
 
-   }
- }
-
- const add5 = makeAdder(5)
-
- console.log(add5(10))
+ 
   
   return (
     <div className="App">
-   <div>{count}</div>
-   <button onClick={() => setTimerOn(true)}>start</button>
-   <button onClick={() => setTimerOn(false)}>stop</button>
-   <button onClick={() => setCount(0)}>reset</button>
+    <div>{time}</div>
+    <button onClick={() => setTimerOn(true)}>Start</button>
+    <button onClick={() => setTimerOn(false)}>Stop</button>
+    <button onClick={() => setTime(0)}>Reset</button>
+    <br></br>
+    {count}
+    <button onClick={() => setCount(count + 1)}>Likes</button>
+    <br></br>
+    {pokemon ? <img src={pokemon.sprites.front_default}/> : "no pokemon yet"}
+    <button onClick={handleClick}>Next Pokemon</button>
+
+
+
+    {/* <div>{pokemons.map((pokemon) => {
+      return <h1>{pokemon.name}</h1>
+    })}</div> */}
    
 </div>
   );
